@@ -1,0 +1,2 @@
+- Easy way to upgrade to the newest version of Ember
+- Use Mocha for testing

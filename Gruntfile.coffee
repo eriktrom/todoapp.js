@@ -10,8 +10,8 @@ module.exports = (grunt) ->
       amd:
         type: 'amd'
         src: [
-          "lib/#{barename}.coffee"
-          "lib/*/**/*.coffee"
+          "app/#{barename}.coffee"
+          "app/*/**/*.coffee"
         ]
         dest: "tmp/#{barename}.amd.coffee"
       tests:
@@ -26,7 +26,7 @@ module.exports = (grunt) ->
       options:
         bare: true
         join: true
-      library:
+      application:
         src: ["tmp/#{barename}.amd.coffee"]
         dest: 'dist/<%= pkg.name %>-<%= pkg.version %>.amd.js'
       browser:
@@ -67,7 +67,7 @@ module.exports = (grunt) ->
       options:
         livereload: true
       files: [
-        'lib/**'
+        'app/**'
         'vendor/*'
         'test/**/*'
       ]
@@ -152,7 +152,7 @@ module.exports = (grunt) ->
                      'Builds a distributable version of <pkg.name>',
                      ['clean',
                       'transpile:amd',
-                      'coffee:library',
+                      'coffee:application',
                       'coffee:browser',
                       'browser:dist',
                       'bytes']
@@ -221,4 +221,4 @@ module.exports = (grunt) ->
 
   nameFor = (path) ->
     console.log(path)
-    path.match(/^(?:lib|test|test\/tests)\/(.*)\.coffee$/)[1]
+    path.match(/^(?:app|test|test\/tests)\/(.*)\.coffee$/)[1]
