@@ -1,0 +1,42 @@
+{
+  "name": "todoapp.js",
+  "version": "0.1.0",
+  "description": "A remake of the todoapp on the emberjs website, with a focus on testing using ember-testing. Also focused on learning using javascript based asset pipeline",
+  "main": "index.js",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/trombom/todoapp.js"
+  },
+  "keywords": [
+    "ember"
+  ],
+  "author": "Erik Trom",
+  "license": "BSD",
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-cli": "~0.1.9",
+    "connect": "~2.7.10",
+    "grunt-contrib-connect": "~0.3.0",
+    "grunt-contrib-clean": "~0.4.1",
+    "grunt-contrib-watch": "~0.4.4",
+    "grunt-contrib-qunit": "~0.2.1",
+    "grunt-contrib-jshint": "~0.5.4",
+    "grunt-hang": "~0.1.2",
+    "grunt-contrib-coffee": "~0.7.0"
+  },
+  "dependencies": {
+    "grunt-contrib-connect": "~0.3.0",
+    "grunt-contrib-clean": "~0.4.1",
+    "connect": "~2.7.11",
+    "grunt-contrib-watch": "~0.4.4",
+    "grunt-contrib-coffee": "~0.7.0",
+    "grunt-cli": "~0.1.9",
+    "grunt-contrib-qunit": "~0.2.1",
+    "grunt": "~0.4.1",
+    "grunt-contrib-jshint": "~0.5.4",
+    "grunt-hang": "~0.1.2"
+  }
+}
