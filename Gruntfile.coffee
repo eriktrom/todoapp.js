@@ -1,5 +1,5 @@
 module.exports = (grunt) ->
-  barename = 'backburner'
+  barename = 'todoapp'
 
   grunt.initConfig
     pkg: grunt.file.readJSON('package.json')
@@ -139,7 +139,6 @@ module.exports = (grunt) ->
 
   # 2. Load grunt tasks used above
   grunt.loadNpmTasks 'grunt-contrib-clean'
-  grunt.loadNpmTasks 'grunt-contrib-concat'
   grunt.loadNpmTasks 'grunt-contrib-connect'
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-contrib-qunit'
