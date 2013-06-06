@@ -241,7 +241,7 @@ module.exports = (grunt) ->
   combineAndWrap = ->
     @files.forEach (filepath) ->
       output = ["(function(globals) {"]
-      output.push(filepath.src.map(grunt.file.read)) # TODO: why? this line was push.apply(output, filepa...)
-      output.push("requireModule('tests/todoapp_test');")
+      output.push.apply(output, filepath.src.map(grunt.file.read)) # TODO: why? this line was push.apply(output, filepa...)
+      output.push("requireModule('tests');")
       output.push('})(window);')
       grunt.file.write(filepath.dest, output.join("\n"))

@@ -16,6 +16,6 @@ module "Todoapp",
 
 test "is an object", ->
   expect 1
-  appCont = App.ApplicationController.create()
-  ok typeof appCont is 'object'
+  visit('/')
+  equal find('h2').text(), "Welcome to Ember.js"
 
