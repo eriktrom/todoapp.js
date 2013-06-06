@@ -54,5 +54,4 @@ grunt-contrib-concurrent ??
 
 
 http://builds.emberjs.com.s3.amazonaws.com/index.html
-http://builds.emberjs.com.s3.amazonaws.com/index.html
 http://builds.handlebarsjs.com.s3.amazonaws.com/index.html
