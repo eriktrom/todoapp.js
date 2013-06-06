@@ -4,7 +4,7 @@ module.exports = (grunt) ->
   grunt.initConfig
     pkg: grunt.file.readJSON('package.json')
 
-    clean: ['dist']
+    clean: ['dist', 'tmp']
 
     transpile:
       amd:
@@ -35,16 +35,30 @@ module.exports = (grunt) ->
           "tmp/#{barename}.amd.coffee"
         ]
         dest: "tmp/#{barename}.browser1.js"
-      buildTests:
-        options: {bare: false}
+      prepareTests:
         src: [
-          'tmp/tests.coffee'
+          'vendor/loader.coffee'
+          'tmp/tests.amd.coffee'
+          "tmp/#{barename}.amd.coffee"
         ]
-        dest: 'tmp/tests.js'
+        dest: 'tmp/without-templates-tests.js'
+      # NOTE: coffee:prepareTests and coffee:browser do almost the same thing, except that prepare
+      # tests adds the tests as well. It would nice if we could use browser1 when running
+      # prepare tests, but its not a coffee file, so we duplicate the logic
+      #
+      # Furthermore, browser:dist and buildTests then almost does the next two steps
+      # respectively, and again we duplicate.
+      #
+      # In better news, we did manage to pull out the logic inside the buildTests
+      # and browser function, so that's at least not duplicated, but this file in general
+      # is still not that clear at all. Try figuring it out. Good luck.
 
     browser:
       dist:
-        src: "tmp/#{barename}.browser1.js"
+        src: [
+          "tmp/#{barename}.browser1.js"
+          "tmp/compiled-templates.js"
+        ]
         dest: 'dist/<%=pkg.name%>-<%=pkg.version%>.js'
 
     connect:
@@ -57,11 +71,10 @@ module.exports = (grunt) ->
     buildTests:
       dist:
         src: [
-          'vendor/loader.coffee'
-          'tmp/tests.amd.coffee'
-          "tmp/#{barename}.amd.coffee"
+          'tmp/without-templates-tests.js'
+          "tmp/compiled-templates.js"
         ]
-        dest: 'tmp/tests.coffee'
+        dest: 'tmp/tests.js'
 
     watch:
       options:
@@ -137,6 +150,16 @@ module.exports = (grunt) ->
           eqnull:true
           # TODO: review the above syntax for true/false. Do you still like it?
 
+    emberTemplates:
+      options:
+        # strip away root path to template so that compiled-templates.js can have key value pairs mapping filename to compiled template
+        templateName: (sourceFile) -> sourceFile.replace('app/templates/', '')
+      dist:
+        files: [
+          'tmp/compiled-templates.js': 'app/templates/**/*.hbs'
+        ]
+
+
   # 2. Load grunt tasks used above
   grunt.loadNpmTasks 'grunt-contrib-clean'
   grunt.loadNpmTasks 'grunt-contrib-connect'
@@ -144,17 +167,19 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-qunit'
   grunt.loadNpmTasks 'grunt-contrib-jshint'
   grunt.loadNpmTasks 'grunt-contrib-coffee'
+  grunt.loadNpmTasks 'grunt-ember-templates'
 
   # 3. setup some tasks
   grunt.registerTask 'default', ['build']
 
   grunt.registerTask 'build',
                      'Builds a distributable version of <pkg.name>',
-                     ['clean',
-                      'transpile:amd',
-                      'coffee:application',
-                      'coffee:browser',
-                      'browser:dist',
+                     ['clean'
+                      'transpile:amd'
+                      'coffee:application'
+                      'coffee:browser'
+                      'emberTemplates:dist'
+                      'browser:dist'
                       'bytes']
 
   grunt.registerTask 'test',
@@ -166,10 +191,10 @@ module.exports = (grunt) ->
 
   grunt.registerTask 'tests',
                      'Builds the test package',
-                     ['build',
-                      'transpile:tests',
-                      'buildTests:dist',
-                      'coffee:buildTests']
+                     ['build'
+                      'transpile:tests'
+                      'coffee:prepareTests'
+                      'buildTests:dist']
 
   grunt.registerTask 'server',
                      'Run the tests in the browser',
@@ -182,21 +207,10 @@ module.exports = (grunt) ->
   grunt.registerTask 'bytes', -> console.log 'TODO: Add a bytes-tracking task'
 
   grunt.registerMultiTask 'browser', 'Export object in <%=pkg.name%> to window', ->
-    @files.forEach (filepath) ->
-      output = ["(function(globals) {"]
-      output.push.apply(output, filepath.src.map(grunt.file.read)) # como?
-      output.push("window.#{barename} = requireModule('#{barename}');")
-      output.push('})(window);')
-      grunt.file.write(filepath.dest, output.join("\n"))
+    combineAndWrap.call(@)
 
   grunt.registerMultiTask 'buildTests', 'Execute the tests', ->
-    testFiles = grunt.file.expand('test/tests/**/*_test.coffee')
-    @files.forEach (filepath) ->
-      output = ['# start']
-      output.push.apply(output, filepath.src.map(grunt.file.read))
-      testFiles.forEach (testFile) ->
-        output.push("requireModule '#{nameFor(testFile)}'")
-      grunt.file.write(filepath.dest, output.join("\n"))
+    combineAndWrap.call(@)
 
   grunt.registerMultiTask 'transpile', 'Transpile ES6 modules to AMD, CJS, or globals', ->
     Compiler = require('es6-module-transpiler').Compiler
@@ -222,3 +236,11 @@ module.exports = (grunt) ->
   nameFor = (path) ->
     console.log(path)
     path.match(/^(?:app|test|test\/tests)\/(.*)\.coffee$/)[1]
+
+  combineAndWrap = ->
+    @files.forEach (filepath) ->
+      output = ["(function(globals) {"]
+      output.push.apply(output, filepath.src.map(grunt.file.read))
+      output.push("window.#{barename} = requireModule('#{barename}');")
+      output.push('})(window);')
+      grunt.file.write(filepath.dest, output.join("\n"))

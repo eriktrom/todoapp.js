@@ -26,6 +26,7 @@
     "grunt-contrib-jshint": "~0.5.4",
     "grunt-hang": "~0.1.2",
     "grunt-contrib-coffee": "~0.7.0",
-    "es6-module-transpiler": "~0.1.2"
+    "es6-module-transpiler": "~0.1.2",
+    "grunt-ember-templates": "~0.4.7"
   }
 }
