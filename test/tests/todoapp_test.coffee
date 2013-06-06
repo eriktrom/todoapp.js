@@ -6,7 +6,6 @@ document.write('<style>#ember-testing-container { position: absolute; background
 Todoapp.rootElement = '#ember-testing'
 Todoapp.setupForTesting()
 Todoapp.injectTestHelpers()
-Ember.testing = true
 
 module "Todoapp",
   setup: ->
@@ -14,8 +13,10 @@ module "Todoapp",
   teardown: ->
     Todoapp.reset()
 
-test "is an object", ->
-  expect 1
+test "list of todos", ->
+  expect 2
   visit('/')
-  equal find('h2').text(), "Welcome to Ember.js"
-
+  .then ->
+    equal find('h2').text(), "Welcome to Ember.js"
+  .then ->
+    equal find('li:first label').text(), "Learn Ember.js"
