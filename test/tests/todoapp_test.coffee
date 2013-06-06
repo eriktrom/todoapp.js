@@ -18,5 +18,5 @@ test "list of todos", ->
   visit('/')
   .then ->
     equal find('h2').text(), "Welcome to Ember.js"
-  .then ->
     equal find('li:first label').text(), "Learn Ember.js"
+
