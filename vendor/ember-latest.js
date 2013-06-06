@@ -1,5 +1,5 @@
-// Version: v1.0.0-rc.5-30-gc5ea0e2
-// Last commit: c5ea0e2 (2013-06-05 19:59:58 -0700)
+// Version: v1.0.0-rc.3-374-gb693795
+// Last commit: b693795 (2013-05-26 05:45:32 -0700)
 
 
 (function() {
@@ -151,8 +151,8 @@ Ember.deprecateFunc = function(message, func) {
 
 })();
 
-// Version: v1.0.0-rc.5-30-gc5ea0e2
-// Last commit: c5ea0e2 (2013-06-05 19:59:58 -0700)
+// Version: v1.0.0-rc.3-374-gb693795
+// Last commit: b693795 (2013-05-26 05:45:32 -0700)
 
 
 (function() {
@@ -169,18 +169,11 @@ var define, requireModule;
     if (seen[name]) { return seen[name]; }
     seen[name] = {};
 
-    var mod, deps, callback, reified, exports;
-
-    mod = registry[name];
-
-    if (!mod) {
-      throw new Error("Module '" + name + "' not found.");
-    }
-
-    deps = mod.deps;
-    callback = mod.callback;
-    reified = [];
-    exports;
+    var mod = registry[name],
+        deps = mod.deps,
+        callback = mod.callback,
+        reified = [],
+        exports;
 
     for (var i=0, l=deps.length; i<l; i++) {
       if (deps[i] === 'exports') {
@@ -219,7 +212,7 @@ var define, requireModule;
 
   @class Ember
   @static
-  @version 1.0.0-rc.5
+  @version 1.0.0-rc.3
 */
 
 if ('undefined' === typeof Ember) {
@@ -246,10 +239,10 @@ Ember.toString = function() { return "Ember"; };
 /**
   @property VERSION
   @type String
-  @default '1.0.0-rc.5'
+  @default '1.0.0-rc.3'
   @final
 */
-Ember.VERSION = '1.0.0-rc.5';
+Ember.VERSION = '1.0.0-rc.3';
 
 /**
   Standard environmental variables. You can define these in a global `ENV`
@@ -4630,7 +4623,7 @@ define("backburner",
           method = target[method];
         }
 
-        var stack = this.DEBUG ? new Error().stack : undefined,
+        var stack = new Error().stack,
             args = arguments.length > 3 ? slice.call(arguments, 3) : undefined;
         if (!this.currentInstance) { createAutorun(this); }
         return this.currentInstance.schedule(queueName, target, method, args, false, stack);
@@ -4646,7 +4639,7 @@ define("backburner",
           method = target[method];
         }
 
-        var stack = this.DEBUG ? new Error().stack : undefined,
+        var stack = new Error().stack,
             args = arguments.length > 3 ? slice.call(arguments, 3) : undefined;
         if (!this.currentInstance) { createAutorun(this); }
         return this.currentInstance.schedule(queueName, target, method, args, true, stack);
@@ -4695,7 +4688,7 @@ define("backburner",
           clearTimeout(laterTimer);
           laterTimer = null;
         }
-        laterTimer = window.setTimeout(function() {
+        laterTimer = setTimeout(function() {
           executeTimers(self);
           laterTimer = null;
           laterTimerExpiresAt = null;
@@ -4716,7 +4709,7 @@ define("backburner",
           if (debouncee[0] === target && debouncee[1] === method) { return; } // do nothing
         }
 
-        var timer = window.setTimeout(function() {
+        var timer = setTimeout(function() {
           self.run.apply(self, args);
 
           // remove debouncee
@@ -4758,7 +4751,7 @@ define("backburner",
       },
 
       cancel: function(timer) {
-        if (timer && typeof timer === 'object' && timer.queue && timer.method) { // we're cancelling a deferOnce
+        if (typeof timer === 'object' && timer.queue && timer.method) { // we're cancelling a deferOnce
           return timer.queue.cancel(timer);
         } else if (typeof timer === 'function') { // we're cancelling a setTimeout
           for (var i = 0, l = timers.length; i < l; i += 2) {
@@ -4767,8 +4760,6 @@ define("backburner",
               return true;
             }
           }
-        } else {
-          return; // timer was null or not a timer
         }
       }
     };
@@ -4779,7 +4770,7 @@ define("backburner",
 
     function createAutorun(backburner) {
       backburner.begin();
-      autorun = window.setTimeout(function() {
+      autorun = setTimeout(function() {
         backburner.end();
         autorun = null;
       });
@@ -4804,7 +4795,7 @@ define("backburner",
       });
 
       if (timers.length) {
-        laterTimer = window.setTimeout(function() {
+        laterTimer = setTimeout(function() {
           executeTimers(self);
           laterTimer = null;
           laterTimerExpiresAt = null;
@@ -5006,6 +4997,7 @@ define("backburner/queue",
 
     __exports__.Queue = Queue;
   });
+
 })();
 
 
@@ -5064,17 +5056,15 @@ var Backburner = requireModule('backburner').Backburner,
 */
 Ember.run = function(target, method) {
   var ret;
-
-  if (Ember.onerror) {
-    try {
-      ret = backburner.run.apply(backburner, arguments);
-    } catch (e) {
-      Ember.onerror(e);
-    }
-  } else {
+  try {
     ret = backburner.run.apply(backburner, arguments);
+  } catch (e) {
+    if (Ember.onerror) {
+      Ember.onerror(e);
+    } else {
+      throw e;
+    }
   }
-
   return ret;
 };
 
@@ -5440,38 +5430,6 @@ Ember.run.next = function() {
 */
 Ember.run.cancel = function(timer) {
   return backburner.cancel(timer);
-};
-
-/**
-  Execute the passed method in a specified amount of time, reset timer
-  upon additional calls.
-
-  ```javascript
-    var myFunc = function() { console.log(this.name + ' ran.'); };
-    var myContext = {name: 'debounce'};
-
-    Ember.run.debounce(myContext, myFunc, 150);
-
-    // less than 150ms passes
-
-    Ember.run.debounce(myContext, myFunc, 150);
-
-    // 150ms passes
-    // myFunc is invoked with context myContext
-    // console logs 'debounce ran.' one time.
-  ```
-
-  @method debounce
-  @param {Object} [target] target of method to invoke
-  @param {Function|String} method The method to invoke.
-    May be a function or a string. If you pass a string
-    then it will be looked up on the passed target.
-  @param {Object} [args*] Optional arguments to pass to the timeout.
-  @param {Number} wait Number of milliseconds to wait.
-  @return {void}
-*/
-Ember.run.debounce = function() {
-  return backburner.debounce.apply(backburner, arguments);
 };
 
 // Make sure it's not an autorun during testing
@@ -6613,29 +6571,6 @@ Ember.immediateObserver = function() {
 };
 
 /**
-  When observers fire, they are called with the arguments `obj`, `keyName`
-  and `value`. In a typical observer, value is the new, post-change value.
-
-  A `beforeObserver` fires before a property changes. The `value` argument contains
-  the pre-change value.
-
-  A `beforeObserver` is an alternative form of `.observesBefore()`.
-
-  ```javascript
-  App.PersonView = Ember.View.extend({
-    valueWillChange: function (obj, keyName, value) {
-      this.changingFrom = value;
-    }.observesBefore('content.value'),
-    valueDidChange: function(obj, keyName, value) {
-        // only run if updating a value already in the DOM
-        if(this.get('state') === 'inDOM') {
-            var color = value > this.changingFrom ? 'green' : 'red';
-            // logic
-        }
-    }.observes('content.value')
-  });
-  ```
-
   @method beforeObserver
   @for Ember
   @param {Function} func
@@ -14777,10 +14712,7 @@ Ember.EventDispatcher = Ember.Object.extend(/** @scope Ember.EventDispatcher.pro
         var actionId = Ember.$(evt.currentTarget).attr('data-ember-action'),
             action   = Ember.Handlebars.ActionHelper.registeredActions[actionId];
 
-        // We have to check for action here since in some cases, jQuery will trigger
-        // an event on `removeChild` (i.e. focusout) after we've already torn down the
-        // action handlers for the view.
-        if (action && action.eventName === eventName) {
+        if (action.eventName === eventName) {
           return action.handler(evt);
         }
       }, this);
@@ -14817,9 +14749,14 @@ Ember.EventDispatcher = Ember.Object.extend(/** @scope Ember.EventDispatcher.pro
   },
 
   _bubbleEvent: function(view, evt, eventName) {
-    return Ember.run(function() {
-      return view.handleEvent(eventName, evt);
-    });
+    // this works around an issue caused when simulated events
+    // are triggerd. Simulated events occure synchronously rather
+    // then on next tick. This causes an unexpected nested run-loop,
+    // resulting in negative behaviour.
+    //
+    // for reference:
+    // https://github.com/emberjs/ember.js/commit/aafb5eb5693dccf04dd0951385b4c6bb6db7ae46
+    return Ember.run.join(view, 'handleEvent', eventName, evt);
   },
 
   destroy: function() {
@@ -15627,7 +15564,7 @@ class:
     eventManager: Ember.Object.create({
       mouseEnter: function(event, view){
         // view might be instance of either
-        // OuterView or InnerView depending on
+        // OutsideView or InnerView depending on
         // where on the page the user interaction occured
       }
     })
@@ -15888,7 +15825,7 @@ Ember.View = Ember.CoreView.extend(
     If a value that affects template rendering changes, the view should be
     re-rendered to reflect the new value.
 
-    @method _contextDidChange
+    @method _displayPropertyDidChange
   */
   _contextDidChange: Ember.observer(function() {
     this.rerender();
@@ -18579,6 +18516,7 @@ Ember.ViewTargetActionSupport = Ember.Mixin.create(Ember.TargetActionSupport, {
 
 
 (function() {
+/*globals jQuery*/
 /**
 Ember Views
 
@@ -19103,63 +19041,10 @@ function makeBindings(options) {
   }
 }
 
-/**
-  Register a bound helper or custom view helper.
-
-  ## Simple bound helper example
-
-  ```javascript
-  Ember.Handlebars.helper('capitalize', function(value) {
-    return value.toUpperCase();
-  });
-  ```
-
-  The above bound helper can be used inside of templates as follows:
-
-  ```handlebars
-  {{capitalize name}}
-  ```
-
-  In this case, when the `name` property of the template's context changes,
-  the rendered value of the helper will update to reflect this change.
-
-  For more examples of bound helpers, see documentation for
-  `Ember.Handlebars.registerBoundHelper`.
-
-  ## Custom view helper example
-
-  Assuming a view subclass named `App.CalenderView` were defined, a helper
-  for rendering instances of this view could be registered as follows:
-
-  ```javascript
-  Ember.Handlebars.helper('calendar', App.CalendarView):
-  ```
-
-  The above bound helper can be used inside of templates as follows:
-
-  ```handlebars
-  {{calendar}}
-  ```
-
-  Which is functionally equivalent to:
-
-  ```handlebars
-  {{view App.CalendarView}}
-  ```
-
-  Options in the helper will be passed to the view in exactly the same
-  manner as with the `view` helper.
-
-  @method helper
-  @for Ember.Handlebars
-  @param {String} name
-  @param {Function|Ember.View} function or view class constructor
-  @param {String} dependentKeys*
-*/
 Ember.Handlebars.helper = function(name, value) {
   if (Ember.View.detect(value)) {
     Ember.Handlebars.registerHelper(name, function(options) {
-      Ember.assert("You can only pass attributes as parameters (not values) to a application-defined helper", arguments.length < 2);
+      Ember.assert("You can only pass attributes as parameters to a application-defined helper", arguments.length < 3);
       makeBindings(options);
       return Ember.Handlebars.helpers.view.call(this, value, options);
     });
@@ -23873,7 +23758,7 @@ define("router",
         its ancestors.
       */
       reset: function() {
-        eachHandler(this.currentHandlerInfos || [], function(handler) {
+        eachHandler(this.currentHandlerInfos, function(handler) {
           if (handler.exit) {
             handler.exit();
           }
@@ -24655,7 +24540,7 @@ Ember.Router = Ember.Object.extend({
   location: 'hash',
 
   init: function() {
-    this.router = this.constructor.router || this.constructor.map(Ember.K);
+    this.router = this.constructor.router;
     this._activeViews = {};
     setupLocation(this);
   },
@@ -25014,9 +24899,6 @@ Ember.Route = Ember.Object.extend({
   /**
     Transition into another route while replacing the current URL if
     possible. Identical to `transitionTo` in all other respects.
-
-    Of the bundled location types, only `history` currently supports
-    this behavior.
 
     @method replaceWith
     @param {String} name the name of the route
@@ -25459,8 +25341,6 @@ Ember.Route = Ember.Object.extend({
 
 function parentRoute(route) {
   var handlerInfos = route.router.router.targetHandlerInfos;
-
-  if (!handlerInfos) { return; }
 
   var parent, current;
 
@@ -26128,12 +26008,8 @@ Ember.onLoad('Ember.Handlebars', function(Handlebars) {
 
     view = container.lookup('view:' + name) || container.lookup('view:default');
 
-    var controllerName = options.hash.controller;
-
-    // Look up the controller by name, if provided.
-    if (controllerName) {
-      controller = container.lookup('controller:' + controllerName, lookupOptions);
-      Ember.assert("The controller name you supplied '" + controllerName + "' did not resolve to a controller.", !!controller);
+    if (controller = options.hash.controller) {
+      controller = container.lookup('controller:' + controller, lookupOptions);
     } else {
       controller = Ember.controllerFor(container, name, context, lookupOptions);
     }
@@ -26380,7 +26256,7 @@ Ember.onLoad('Ember.Handlebars', function(Handlebars) {
 
     Alternatively, a `target` option can be provided to the helper to change
     which object will receive the method call. This option must be a path
-    to an object, accessible in the current context:
+    path to an object, accessible in the current context:
 
     ```handlebars
     <script type="text/x-handlebars" data-template-name='a-template'>
@@ -26682,7 +26558,7 @@ Ember.View.reopen({
   _hasEquivalentView: function(outletName, view) {
     var existingView = get(this, '_outlets.'+outletName);
     return existingView &&
-      existingView.constructor === view.constructor &&
+      existingView.prototype === view.prototype &&
       existingView.get('template') === view.get('template') &&
       existingView.get('context') === view.get('context');
   },
@@ -27471,7 +27347,7 @@ DeprecatedContainer.deprecate = function(method) {
   return function() {
     var container = this._container;
 
-    Ember.deprecate('Using the defaultContainer is no longer supported. [defaultContainer#' + method + '] see: http://git.io/EKPpnA', false);
+    Ember.deprecate('Using the defaultContainer is no longer supported. [defaultContainer#' + method + ']', false);
     return container[method].apply(container, arguments);
   };
 };
@@ -28201,11 +28077,10 @@ function resolverFor(namespace) {
 }
 
 function normalize(fullName) {
-  var split = fullName.split(':', 2),
+  var split = fullName.split(':'),
       type = split[0],
       name = split[1];
 
-  Ember.assert("Tried to normalize a container name without a colon (:) in it. You probably tried to lookup a name that did not contain a type, a colon, and a name. A proper lookup name would be `view:post`.", split.length === 2);
 
   if (type !== 'template') {
     var result = name;
@@ -28304,8 +28179,6 @@ Ember.ControllerMixin.reopen({
     ```javascript
     this.get('controllers.post'); // instance of App.PostController
     ```
-
-    This is only available for singleton controllers.
 
     @property {Array} needs
     @default []
@@ -29722,7 +29595,7 @@ Ember.Test = {
       chained: false
     };
     thenable.then = function(onSuccess, onFailure) {
-      var thenPromise, nextPromise;
+      var self = this, thenPromise, nextPromise;
       thenable.chained = true;
       thenPromise = promise.then(onSuccess, onFailure);
       // this is to ensure all downstream fulfillment
@@ -29920,7 +29793,7 @@ function visit(app, url) {
 function click(app, selector, context) {
   var $el = find(app, selector, context);
   Ember.run(function() {
-    $el.click();
+    app.$(selector).click();
   });
   return wait(app);
 }
@@ -29949,7 +29822,7 @@ function find(app, selector, context) {
 }
 
 function wait(app, value) {
-  var promise;
+  var promise, obj = {}, helperName;
 
   promise = Ember.Test.promise(function(resolve) {
     if (++countAsync === 1) {
@@ -30031,6 +29904,12 @@ helper('wait', wait);
 
 })();
 
+
+})();
+// Version: v1.0.0-rc.3-374-gb693795
+// Last commit: b693795 (2013-05-26 05:45:32 -0700)
+
+
 (function() {
 /**
 Ember
@@ -30040,5 +29919,3 @@ Ember
 
 })();
 
-
-})();

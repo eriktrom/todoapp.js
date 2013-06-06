@@ -1,5 +1,6 @@
 module.exports = (grunt) ->
   barename = 'todoapp'
+  appname = 'Todoapp'
 
   grunt.initConfig
     pkg: grunt.file.readJSON('package.json')
@@ -241,6 +242,6 @@ module.exports = (grunt) ->
     @files.forEach (filepath) ->
       output = ["(function(globals) {"]
       output.push.apply(output, filepath.src.map(grunt.file.read))
-      output.push("window.#{barename} = requireModule('#{barename}');")
+      output.push("window.#{appname} = requireModule('#{barename}');")
       output.push('})(window);')
       grunt.file.write(filepath.dest, output.join("\n"))

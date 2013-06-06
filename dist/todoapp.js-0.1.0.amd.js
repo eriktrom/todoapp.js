@@ -1,6 +1,6 @@
 define("todoapp", ["exports"], function(__exports__) {
   "use strict";
   var Todoapp;
-  Todoapp = function() {};
+  Todoapp = Em.Application.create();
   return __exports__.Todoapp = Todoapp;
 });
