@@ -1,3 +1,5 @@
-Todoapp = Em.Application.create()
+window.Todoapp = Todoapp = Em.Application.create()
+
+requireModule 'todoapp/router'
 
 export Todoapp

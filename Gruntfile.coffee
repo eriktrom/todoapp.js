@@ -81,7 +81,7 @@ module.exports = (grunt) ->
       options:
         livereload: true
       files: [
-        'app/**'
+        'app/**/*'
         'vendor/*'
         'test/**/*'
       ]
