@@ -241,7 +241,7 @@ module.exports = (grunt) ->
   combineAndWrap = ->
     @files.forEach (filepath) ->
       output = ["(function(globals) {"]
-      output.push.apply(output, filepath.src.map(grunt.file.read)) # TODO: why? this line was push.apply(output, filepa...)
+      output.push.apply(output, filepath.src.map(grunt.file.read)) # TODO: A: using apply removes the comma that would precede the second file
       output.push("requireModule('tests');")
       output.push('})(window);')
       grunt.file.write(filepath.dest, output.join("\n"))
