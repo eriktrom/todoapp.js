@@ -1,4 +1,3 @@
-# Todoapp = Em.Application.create()
+window.Todoapp = Todoapp = Em.Application.create()
 
-Todoapp = ->
 export Todoapp

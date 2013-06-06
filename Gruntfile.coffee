@@ -44,15 +44,15 @@ module.exports = (grunt) ->
         ]
         dest: 'tmp/without-templates-tests.js'
       # NOTE: coffee:prepareTests and coffee:browser do almost the same thing, except that prepare
-      # tests adds the tests as well. It would nice if we could use browser1 when running
-      # prepare tests, but its not a coffee file, so we duplicate the logic
-      #
-      # Furthermore, browser:dist and buildTests then almost does the next two steps
-      # respectively, and again we duplicate.
-      #
-      # In better news, we did manage to pull out the logic inside the buildTests
-      # and browser function, so that's at least not duplicated, but this file in general
-      # is still not that clear at all. Try figuring it out. Good luck.
+        # tests adds the tests as well. It would nice if we could use browser1 when running
+        # prepare tests, but its not a coffee file, so we duplicate the logic
+        #
+        # Furthermore, browser:dist and buildTests then almost does the next two steps
+        # respectively, and again we duplicate.
+        #
+        # In better news, we did manage to pull out the logic inside the buildTests
+        # and browser function, so that's at least not duplicated, but this file in general
+        # is still not that clear at all. Try figuring it out. Good luck.
 
     browser:
       dist:
@@ -241,7 +241,7 @@ module.exports = (grunt) ->
   combineAndWrap = ->
     @files.forEach (filepath) ->
       output = ["(function(globals) {"]
-      output.push.apply(output, filepath.src.map(grunt.file.read))
-      output.push("window.#{appname} = requireModule('#{barename}');")
+      output.push(filepath.src.map(grunt.file.read)) # TODO: why? this line was push.apply(output, filepa...)
+      output.push("requireModule('tests/todoapp_test');")
       output.push('})(window);')
       grunt.file.write(filepath.dest, output.join("\n"))
