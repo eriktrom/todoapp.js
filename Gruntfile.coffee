@@ -108,26 +108,32 @@ module.exports = (grunt) ->
         ]
         options:
           predef: [
-            "define",
-            "console",
-            "require",
-            "requireModule",
-            "equal",
-            "notEqual",
-            "notStrictEqual",
-            "test",
-            "asyncTest",
-            "testBoth",
-            "testWithDefault",
-            "raises",
-            "throws",
-            "deepEqual",
-            "start",
-            "stop",
-            "ok",
-            "strictEqual",
-            "module",
+            "define"
+            "console"
+            "require"
+            "requireModule"
+            "equal"
+            "notEqual"
+            "notStrictEqual"
+            "test"
+            "asyncTest"
+            "testBoth"
+            "testWithDefault"
+            "raises"
+            "throws"
+            "deepEqual"
+            "start"
+            "stop"
+            "ok"
+            "strictEqual"
+            "module"
             "expect"
+            "Em"
+            "Ember"
+            "#{appname}"
+            "DS"
+            "visit"
+            "find"
           ]
           node:         false
           browser:true
@@ -213,6 +219,10 @@ module.exports = (grunt) ->
 
   grunt.registerMultiTask 'browser', 'Export object in <%=pkg.name%> to window', ->
     combineAndWrap.call(@)
+    # TODO: something is not right here, consult backburner where the browser
+    # and bulidTests tasks inject slightly different requireModule statements.
+    # Either this is luck, or I solved it and at the moment don't remember how.
+    # Bad and evil coding. This file should be readable and clear as day.
 
   grunt.registerMultiTask 'buildTests', 'Execute the tests', ->
     combineAndWrap.call(@)
