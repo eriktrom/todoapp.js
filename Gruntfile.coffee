@@ -53,6 +53,10 @@ module.exports = (grunt) ->
         # In better news, we did manage to pull out the logic inside the buildTests
         # and browser function, so that's at least not duplicated, but this file in general
         # is still not that clear at all. Try figuring it out. Good luck.
+        #
+        # Update: buildTest custom task is okay for now but the browser custom task
+        # should not be sharing the exact same method as it does. Check backburner.js to
+        # for comparison and clean up and clarify this mess. Again, good luck.
 
     browser:
       dist:
