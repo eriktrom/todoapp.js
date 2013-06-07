@@ -99,68 +99,6 @@ module.exports = (grunt) ->
         options:
           urls: ['http://localhost:8000/test']
 
-    jshint:
-      # TODO: run jshint on individual files when jshint supports es6 modules
-      all:
-        src: [
-          "dist/<%= pkg.name %>-<%= pkg.version %>.js",
-          "tmp/tests.js"
-        ]
-        options:
-          predef: [
-            "define"
-            "console"
-            "require"
-            "requireModule"
-            "equal"
-            "notEqual"
-            "notStrictEqual"
-            "test"
-            "asyncTest"
-            "testBoth"
-            "testWithDefault"
-            "raises"
-            "throws"
-            "deepEqual"
-            "start"
-            "stop"
-            "ok"
-            "strictEqual"
-            "module"
-            "expect"
-            "Em"
-            "Ember"
-            "#{appname}"
-            "DS"
-            "visit"
-            "find"
-          ]
-          node:         false
-          browser:true
-          boss:true
-          curly:        false
-          debug:        false
-          devel:        false
-          eqeqeq:true
-          evil:true
-          forin:        false
-          immed:        false
-          laxbreak:     false
-          newcap:true
-          noarg:true
-          noempty:      false
-          nonew:        false
-          nomen:        false
-          onevar:       false
-          plusplus:     false
-          regexp:       false
-          undef:true
-          sub:true
-          strict:       false
-          white:        false
-          eqnull:true
-          # TODO: review the above syntax for true/false. Do you still like it?
-
     emberTemplates:
       options:
         # strip away root path to template so that compiled-templates.js can have key value pairs mapping filename to compiled template
@@ -176,7 +114,6 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-connect'
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-contrib-qunit'
-  grunt.loadNpmTasks 'grunt-contrib-jshint'
   grunt.loadNpmTasks 'grunt-contrib-coffee'
   grunt.loadNpmTasks 'grunt-ember-templates'
 
@@ -197,8 +134,7 @@ module.exports = (grunt) ->
                      'Single test run, suitable for CI Server',
                      ['connect',
                       'tests',
-                      'qunit',
-                      'jshint']
+                      'qunit']
 
   grunt.registerTask 'tests',
                      'Builds the test package',

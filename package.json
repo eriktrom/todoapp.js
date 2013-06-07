@@ -23,7 +23,6 @@
     "grunt-contrib-clean": "~0.4.1",
     "grunt-contrib-watch": "~0.4.4",
     "grunt-contrib-qunit": "~0.2.1",
-    "grunt-contrib-jshint": "~0.5.4",
     "grunt-hang": "~0.1.2",
     "grunt-contrib-coffee": "~0.7.0",
     "es6-module-transpiler": "~0.1.2",
