@@ -1,6 +1,5 @@
 module.exports = (grunt) ->
   barename = 'todoapp'
-  appname = 'Todoapp'
 
   grunt.initConfig
     pkg: grunt.file.readJSON('package.json')
@@ -127,8 +126,7 @@ module.exports = (grunt) ->
                       'coffee:application'
                       'coffee:browser'
                       'emberTemplates:dist'
-                      'browser:dist'
-                      'bytes']
+                      'browser:dist']
 
   grunt.registerTask 'test',
                      'Single test run, suitable for CI Server',
@@ -151,8 +149,6 @@ module.exports = (grunt) ->
                       'watch']
 
 
-  grunt.registerTask 'bytes', -> console.log 'TODO: Add a bytes-tracking task'
-
   grunt.registerMultiTask 'browser', 'Export object in <%=pkg.name%> to window', ->
     combineAndWrap.call(@)
     # TODO: something is not right here, consult backburner where the browser
@@ -165,7 +161,7 @@ module.exports = (grunt) ->
 
   grunt.registerMultiTask 'transpile', 'Transpile ES6 modules to AMD, CJS, or globals', ->
     Compiler = require('es6-module-transpiler').Compiler
-    options = @options # TODO: review grunt docs and explain this.options
+    options = @options
       format: 'amd'
       coffee: true
     @files.forEach (f) ->
