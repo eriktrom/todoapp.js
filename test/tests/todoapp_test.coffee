@@ -1,8 +1,6 @@
 module "Todoapp",
-  setup: ->
-    Ember.run(Todoapp, Todoapp.advanceReadiness)
-  teardown: ->
-    Todoapp.reset()
+  setup: -> integrationTestSetup.call(@)
+  teardown: -> integrationTestTeardown.call(@)
 
 test "list of todos", ->
   expect 2
@@ -10,4 +8,5 @@ test "list of todos", ->
   .then ->
     equal find('h2').text(), "Welcome to Ember.js"
     equal find('li:first label').text(), "Learn Ember.js"
+    equal
 

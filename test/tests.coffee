@@ -7,6 +7,11 @@ Todoapp.rootElement = '#ember-testing'
 Todoapp.setupForTesting()
 Todoapp.injectTestHelpers()
 
+window.integrationTestSetup = ->
+  Ember.run(Todoapp, Todoapp.advanceReadiness)
+window.integrationTestTeardown = ->
+  Todoapp.reset()
+
 requireModule "tests/todoapp_test"
 
 # TODO: understand in full the best way to require and import modules, then refactor
