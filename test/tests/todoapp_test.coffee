@@ -2,13 +2,11 @@ module "Todoapp",
   setup: -> integrationTestSetup.call(@)
   teardown: -> integrationTestTeardown.call(@)
 
-test "list of todos", ->
-  expect 4
+test "mark todo as completed", ->
+  expect 2
   visit('/')
   .then ->
-    equal find('h2').text(), "Welcome to Ember.js"
-    equal find('li:first label').text(), "Learn Ember.js"
-    equal find('li:first').hasClass('completed'), true
+    equal find('li:last').hasClass('completed'), false
   .click('li:last input')
   .then ->
     equal find('li:last').hasClass('completed'), true
