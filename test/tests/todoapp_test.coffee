@@ -9,3 +9,6 @@ test "list of todos", ->
     equal find('h2').text(), "Welcome to Ember.js"
     equal find('li:first label').text(), "Learn Ember.js"
     equal find('li:first').hasClass('completed'), true
+  .click('li:last')
+  .then ->
+    equal find('li:last').hasClass('completed'), true
