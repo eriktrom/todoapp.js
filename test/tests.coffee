@@ -8,3 +8,8 @@ Todoapp.setupForTesting()
 Todoapp.injectTestHelpers()
 
 requireModule "tests/todoapp_test"
+
+# TODO: understand in full the best way to require and import modules, then refactor
+# this if it makes sense. I'm not sure loading each test file here is better than
+# requiring a shared helper inside of new test files. Current implementation seems
+# inside out, but my mind needs to digest how this works before finding a better solution
