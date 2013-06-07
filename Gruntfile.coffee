@@ -48,14 +48,6 @@ module.exports = (grunt) ->
         #
         # Furthermore, browser:dist and buildTests then almost does the next two steps
         # respectively, and again we duplicate.
-        #
-        # In better news, we did manage to pull out the logic inside the buildTests
-        # and browser function, so that's at least not duplicated, but this file in general
-        # is still not that clear at all. Try figuring it out. Good luck.
-        #
-        # Update: buildTest custom task is okay for now but the browser custom task
-        # should not be sharing the exact same method as it does. Check backburner.js to
-        # for comparison and clean up and clarify this mess. Again, good luck.
 
     browser:
       dist:
@@ -150,14 +142,10 @@ module.exports = (grunt) ->
 
 
   grunt.registerMultiTask 'browser', 'Export object in <%=pkg.name%> to window', ->
-    combineAndWrap.call(@)
-    # TODO: something is not right here, consult backburner where the browser
-    # and bulidTests tasks inject slightly different requireModule statements.
-    # Either this is luck, or I solved it and at the moment don't remember how.
-    # Bad and evil coding. This file should be readable and clear as day.
+    combineAndWrap.call(@, barename)
 
   grunt.registerMultiTask 'buildTests', 'Execute the tests', ->
-    combineAndWrap.call(@)
+    combineAndWrap.call(@, 'tests')
 
   grunt.registerMultiTask 'transpile', 'Transpile ES6 modules to AMD, CJS, or globals', ->
     Compiler = require('es6-module-transpiler').Compiler
@@ -184,10 +172,10 @@ module.exports = (grunt) ->
     console.log(path)
     path.match(/^(?:app|test|test\/tests)\/(.*)\.coffee$/)[1]
 
-  combineAndWrap = ->
+  combineAndWrap = (dependency) ->
     @files.forEach (filepath) ->
       output = ["(function(globals) {"]
       output.push.apply(output, filepath.src.map(grunt.file.read)) # TODO: A: using apply removes the comma that would precede the second file
-      output.push("requireModule('tests');")
+      output.push("requireModule('#{dependency}');")
       output.push('})(window);')
       grunt.file.write(filepath.dest, output.join("\n"))
