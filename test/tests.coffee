@@ -7,9 +7,9 @@ Todoapp.rootElement = '#ember-testing'
 Todoapp.setupForTesting()
 Todoapp.injectTestHelpers()
 
-window.integrationTestSetup = ->
+globals.integrationTestSetup = ->
   Ember.run(Todoapp, Todoapp.advanceReadiness)
-window.integrationTestTeardown = ->
+globals.integrationTestTeardown = ->
   Todoapp.reset()
 
 requireModule "tests/todoapp_test"

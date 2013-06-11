@@ -1,3 +1,10 @@
+<h1>Todos</h1>
+
+{{view Em.TextField id="new-todo"
+                    placeholder="What needs to be done?"
+                    valueBinding="newTitle"
+                    action="createTodo"}}
+
 <ul id="todo-list">
   {{#each itemController="todo"}}
     <li {{bindAttr class="isCompleted:completed"}}>
