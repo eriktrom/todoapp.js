@@ -1,6 +1,6 @@
 define("todoapp/main",
-  ["todoapp/application","todoapp/routes/todos","todoapp/controllers/todo_controller","todoapp/models/todo","todoapp/fixtures"],
-  (__dependency1__, __dependency2__, __dependency3__, __dependency4__, Fixtures) ->
+  ["todoapp/application","todoapp/routes/todos","todoapp/controllers/todo_controller","todoapp/models/todo","todoapp/fixtures","exports"],
+  (__dependency1__, __dependency2__, __dependency3__, __dependency4__, Fixtures, __exports__) ->
     "use strict"
     Application = __dependency1__.Application
     TodosRoute = __dependency2__.TodosRoute
@@ -14,7 +14,6 @@ define("todoapp/main",
 
     Todoapp = Application.create()
 
-
     # routes
     Todoapp.TodosRoute = TodosRoute
     # views
@@ -23,4 +22,5 @@ define("todoapp/main",
     # models
     Todoapp.Todo = Todo
 
+    __exports__.Todoapp = Todoapp
   )

@@ -1,5 +1,5 @@
-// Version: v1.0.0-rc.5-1-gf84c193
-// Last commit: f84c193 (2013-06-01 13:57:19 -0400)
+// Version: v1.0.0-rc.5-21-g5fc4644
+// Last commit: 5fc4644 (2013-06-04 10:38:27 -0700)
 
 
 (function() {
@@ -151,8 +151,8 @@ Ember.deprecateFunc = function(message, func) {
 
 })();
 
-// Version: v1.0.0-rc.5-1-gf84c193
-// Last commit: f84c193 (2013-06-01 13:57:19 -0400)
+// Version: v1.0.0-rc.5-21-g5fc4644
+// Last commit: 5fc4644 (2013-06-04 10:38:27 -0700)
 
 
 (function() {
@@ -1420,10 +1420,10 @@ var populateListeners = function(name) {
 };
 
 var time = (function() {
-	var perf = 'undefined' !== typeof window ? window.performance || {} : {};
-	var fn = perf.now || perf.mozNow || perf.webkitNow || perf.msNow || perf.oNow;
-	// fn.bind will be available in all the browsers that support the advanced window.performance... ;-)
-	return fn ? fn.bind(perf) : function() { return +new Date(); };
+  var perf = 'undefined' !== typeof window ? window.performance || {} : {};
+  var fn = perf.now || perf.mozNow || perf.webkitNow || perf.msNow || perf.oNow;
+  // fn.bind will be available in all the browsers that support the advanced window.performance... ;-)
+  return fn ? fn.bind(perf) : function() { return +new Date(); };
 })();
 
 
@@ -2777,14 +2777,14 @@ Map.create = function() {
 Map.prototype = {
   /**
     This property will change as the number of objects in the map changes.
-   
+
     @property length
     @type number
     @default 0
   */
   length: 0,
-    
-    
+
+
   /**
     Retrieve the value associated with a given key.
 
@@ -4368,7 +4368,7 @@ Ember.computed.alias = function(dependentKey) {
   @return {Ember.ComputedProperty} computed property which creates an
   one way computed property to the original value for property.
 
-  Where `computed.alias` aliases `get` and `set`, and allows for bidirectional 
+  Where `computed.alias` aliases `get` and `set`, and allows for bidirectional
   data flow, `computed.oneWay` only provides an aliased `get`. The `set` will
   not mutate the upstream property, rather causes the current property to
   become the value set. This causes the downstream property to permentantly
@@ -4758,7 +4758,7 @@ define("backburner",
       },
 
       cancel: function(timer) {
-        if (typeof timer === 'object' && timer.queue && timer.method) { // we're cancelling a deferOnce
+        if (timer && typeof timer === 'object' && timer.queue && timer.method) { // we're cancelling a deferOnce
           return timer.queue.cancel(timer);
         } else if (typeof timer === 'function') { // we're cancelling a setTimeout
           for (var i = 0, l = timers.length; i < l; i += 2) {
@@ -4767,6 +4767,8 @@ define("backburner",
               return true;
             }
           }
+        } else {
+          return; // timer was null or not a timer
         }
       }
     };
@@ -5004,7 +5006,6 @@ define("backburner/queue",
 
     __exports__.Queue = Queue;
   });
-
 })();
 
 
@@ -5112,7 +5113,7 @@ Ember.run = function(target, method) {
     May be a function or a string. If you pass a string
     then it will be looked up on the passed target.
   @param {Object} [args*] Any additional arguments you wish to pass to the method.
-  @return {Object} return value from invoking the passed function. Please note, 
+  @return {Object} return value from invoking the passed function. Please note,
   when called within an existing loop, no return value is possible.
 */
 Ember.run.join = function(target, method) {
@@ -5439,6 +5440,38 @@ Ember.run.next = function() {
 */
 Ember.run.cancel = function(timer) {
   return backburner.cancel(timer);
+};
+
+/**
+  Execute the passed method in a specified amount of time, reset timer
+  upon additional calls.
+
+  ```javascript
+    var myFunc = function() { console.log(this.name + ' ran.'); };
+    var myContext = {name: 'debounce'};
+
+    Ember.run.debounce(myContext, myFunc, 150);
+
+    // less than 150ms passes
+
+    Ember.run.debounce(myContext, myFunc, 150);
+
+    // 150ms passes
+    // myFunc is invoked with context myContext
+    // console logs 'debounce ran.' one time.
+  ```
+
+  @method debounce
+  @param {Object} [target] target of method to invoke
+  @param {Function|String} method The method to invoke.
+    May be a function or a string. If you pass a string
+    then it will be looked up on the passed target.
+  @param {Object} [args*] Optional arguments to pass to the timeout.
+  @param {Number} wait Number of milliseconds to wait.
+  @return {void}
+*/
+Ember.run.debounce = function() {
+  return backburner.debounce.apply(backburner, arguments);
 };
 
 // Make sure it's not an autorun during testing
@@ -19071,6 +19104,59 @@ function makeBindings(options) {
   }
 }
 
+/**
+  Register a bound helper or custom view helper.
+
+  ## Simple bound helper example
+
+  ```javascript
+  Ember.Handlebars.helper('capitalize', function(value) {
+    return value.toUpperCase();
+  });
+  ```
+
+  The above bound helper can be used inside of templates as follows:
+
+  ```handlebars
+  {{capitalize name}}
+  ```
+
+  In this case, when the `name` property of the template's context changes,
+  the rendered value of the helper will update to reflect this change.
+
+  For more examples of bound helpers, see documentation for
+  `Ember.Handlebars.registerBoundHelper`.
+
+  ## Custom view helper example
+
+  Assuming a view subclass named `App.CalenderView` were defined, a helper
+  for rendering instances of this view could be registered as follows:
+
+  ```javascript
+  Ember.Handlebars.helper('calendar', App.CalendarView):
+  ```
+
+  The above bound helper can be used inside of templates as follows:
+
+  ```handlebars
+  {{calendar}}
+  ```
+
+  Which is functionally equivalent to:
+
+  ```handlebars
+  {{view App.CalendarView}}
+  ```
+
+  Options in the helper will be passed to the view in exactly the same
+  manner as with the `view` helper.
+
+  @method helper
+  @for Ember.Handlebars
+  @param {String} name
+  @param {Function|Ember.View} function or view class constructor
+  @param {String} dependentKeys*
+*/
 Ember.Handlebars.helper = function(name, value) {
   if (Ember.View.detect(value)) {
     Ember.Handlebars.registerHelper(name, function(options) {
@@ -22810,7 +22896,7 @@ helpers = helpers || Ember.Handlebars.helpers; data = data || {};
   var buffer = '', stack1, hashTypes, hashContexts, escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
-  
+
   var buffer = '', hashTypes, hashContexts;
   data.buffer.push("<option value=\"\">");
   hashTypes = {};
@@ -22821,7 +22907,7 @@ function program1(depth0,data) {
   }
 
 function program3(depth0,data) {
-  
+
   var hashContexts, hashTypes;
   hashContexts = {'contentBinding': depth0};
   hashTypes = {'contentBinding': "STRING"};
@@ -22839,7 +22925,7 @@ function program3(depth0,data) {
   stack1 = helpers.each.call(depth0, "view.content", {hash:{},inverse:self.noop,fn:self.program(3, program3, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   return buffer;
-  
+
 }),
   attributeBindings: ['multiple', 'disabled', 'tabindex', 'name'],
 
@@ -24570,7 +24656,7 @@ Ember.Router = Ember.Object.extend({
   location: 'hash',
 
   init: function() {
-    this.router = this.constructor.router;
+    this.router = this.constructor.router || this.constructor.map(Ember.K);
     this._activeViews = {};
     setupLocation(this);
   },
@@ -25499,7 +25585,7 @@ function teardownView(route) {
 
 /*
   A TransitionEvent is passed as the argument for `transitionTo`
-  events and contains information about an attempted transition 
+  events and contains information about an attempted transition
   that can be modified or decorated by leafier `transitionTo` event
   handlers before the actual transition is committed by ApplicationRoute.
 
@@ -25510,7 +25596,7 @@ function teardownView(route) {
 Ember.TransitionEvent = Ember.Object.extend({
 
   /*
-    The Ember.Route method used to perform the transition.  Presently, 
+    The Ember.Route method used to perform the transition.  Presently,
     the only valid values are 'transitionTo' and 'replaceWith'.
    */
   transitionMethod: 'transitionTo',
@@ -25646,7 +25732,7 @@ Ember.onLoad('Ember.Handlebars', function(Handlebars) {
 
     disabled: Ember.computed(function(key, value) {
       if (value !== undefined) { this.set('_isDisabled', value); }
-      
+
       return value ? this.get('disabledClass') : false;
     }),
 
@@ -25669,7 +25755,7 @@ Ember.onLoad('Ember.Handlebars', function(Handlebars) {
 
       event.preventDefault();
       if (this.bubbles === false) { event.stopPropagation(); }
-      
+
       if (get(this, '_isDisabled')) { return false; }
 
       var router = this.get('router');
@@ -25738,7 +25824,7 @@ Ember.onLoad('Ember.Handlebars', function(Handlebars) {
     </li>
     ```
 
-    To override this option for your entire application, see 
+    To override this option for your entire application, see
     "Overriding Application-wide Defaults".
 
     ### Handling `href`
@@ -25785,7 +25871,7 @@ Ember.onLoad('Ember.Handlebars', function(Handlebars) {
     </a>
     ```
 
-    To override this option for your entire application, see 
+    To override this option for your entire application, see
     "Overriding Application-wide Defaults".
 
     ### Supplying a model
@@ -26043,8 +26129,12 @@ Ember.onLoad('Ember.Handlebars', function(Handlebars) {
 
     view = container.lookup('view:' + name) || container.lookup('view:default');
 
-    if (controller = options.hash.controller) {
-      controller = container.lookup('controller:' + controller, lookupOptions);
+    var controllerName = options.hash.controller;
+
+    // Look up the controller by name, if provided.
+    if (controllerName) {
+      controller = container.lookup('controller:' + controllerName, lookupOptions);
+      Ember.assert("The controller name you supplied '" + controllerName + "' did not resolve to a controller.", !!controller);
     } else {
       controller = Ember.controllerFor(container, name, context, lookupOptions);
     }
@@ -26505,7 +26595,7 @@ Ember.ControllerMixin.reopen({
     Optionally supply a model for the route in question. The model
     will be serialized into the URL using the `serialize` hook of
     the route:
-    
+
     ```javascript
       aController.transitionToRoute('blogPost', aPost);
     ```
@@ -26593,7 +26683,7 @@ Ember.View.reopen({
   _hasEquivalentView: function(outletName, view) {
     var existingView = get(this, '_outlets.'+outletName);
     return existingView &&
-      existingView.prototype === view.prototype &&
+      existingView.constructor === view.constructor &&
       existingView.get('template') === view.get('template') &&
       existingView.get('context') === view.get('context');
   },
@@ -28207,11 +28297,11 @@ Ember.ControllerMixin.reopen({
       needs: ['post']
     });
     ```
-    
+
     The application's single instance of these other
     controllers are accessible by name through the
     `controllers` property:
-    
+
     ```javascript
     this.get('controllers.post'); // instance of App.PostController
     ```

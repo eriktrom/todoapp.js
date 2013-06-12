@@ -1,5 +1,7 @@
+import Todo from 'todoapp/models/todo'
+
 TodosRoute = Ember.Route.extend
   model: ->
-    Todoapp.Todo.find()
+    Todo.find()
 
 export TodosRoute

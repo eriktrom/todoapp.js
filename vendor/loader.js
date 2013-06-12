@@ -1,28 +1,39 @@
-define = null
-requireModule = null
+var define, requireModule;
 
-do ->
-  registry = {}
-  seen = {}
+(function() {
+  var registry = {}, seen = {};
 
-  define = (name, deps, callback) ->
-    registry[name] = {deps, callback}
-    return
+  define = function(name, deps, callback) {
+    registry[name] = { deps: deps, callback: callback };
+  };
 
-  requireModule = (name) ->
-    return seen[name] if seen[name]
-    seen[name] = {}
-    throw new Error("Could not find module #{name}") unless registry[name]
+  requireModule = function(name) {
+    if (seen[name]) { return seen[name]; }
+    seen[name] = {};
 
-    mod = registry[name]
-    {deps, callback} = mod
-    reified = []
+    var mod = registry[name];
 
-    for dep in deps
-      if dep is 'exports'
-        reified.push(exports = {})
-      else
-        reified.push(requireModule(dep))
+    if (!mod) {
+      throw new Error("Module: '" + name + "' not found.");
+    }
 
-    value = callback.apply(@, reified)
-    seen[name] = exports || value
+    var deps = mod.deps,
+        callback = mod.callback,
+        reified = [],
+        exports;
+
+    for (var i=0, l=deps.length; i<l; i++) {
+      if (deps[i] === 'exports') {
+        reified.push(exports = {});
+      } else {
+        reified.push(requireModule(deps[i]));
+      }
+    }
+
+    var value = callback.apply(this, reified);
+    return seen[name] = exports || value;
+  };
+
+  define.registry = registry;
+  define.seen = seen;
+})();

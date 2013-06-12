@@ -21,11 +21,8 @@ test "mark todo as completed", ->
   .then ->
     equal find('li:last').hasClass('completed'), true
 
-test "create a new todo", ->
-  expect 1
-  visit('/')
-  .then ->
-    fillIn('#new-todo', "Eat this hamburger")
-    click
-  .then ->
-    find()
+# test "create a new todo", ->
+#   expect 1
+#   visit('/')
+#   .then ->
+#     fillIn('#new-todo', "Eat this hamburger")

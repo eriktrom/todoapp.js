@@ -11,7 +11,6 @@ import 'todoapp/fixtures' as Fixtures
 
 Todoapp = Application.create()
 
-
 # routes
 Todoapp.TodosRoute = TodosRoute
 # views
@@ -19,3 +18,5 @@ Todoapp.TodosRoute = TodosRoute
 Todoapp.TodoController = TodoController
 # models
 Todoapp.Todo = Todo
+
+export Todoapp

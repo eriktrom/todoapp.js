@@ -1,10 +1,12 @@
 define("todoapp/routes/todos",
-  ["exports"],
-  (__exports__) ->
+  ["todoapp/models/todo","exports"],
+  (__dependency1__, __exports__) ->
     "use strict"
+    Todo = __dependency1__.Todo
+
     TodosRoute = Ember.Route.extend
       model: ->
-        Todoapp.Todo.find()
+        Todo.find()
 
     __exports__.TodosRoute = TodosRoute
   )

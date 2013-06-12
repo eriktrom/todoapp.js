@@ -15,7 +15,9 @@ module.exports = (grunt) ->
     jshint: config('jshint')
     copy: config('copy')
     concat: config('concat')
-
+    connect: config('connect')
+    watch: config('watch')
+    qunit: config('qunit')
 
 
   grunt.registerTask 'build', [
@@ -26,4 +28,19 @@ module.exports = (grunt) ->
     'jshint'
     'copy'
     'concat'
+    'index.html'
   ]
+
+  grunt.registerTask 'server', [
+    'build'
+    'connect'
+    'watch'
+  ]
+
+  grunt.registerTask 'test', [
+    'build'
+    'connect'
+    'qunit'
+  ]
+
+

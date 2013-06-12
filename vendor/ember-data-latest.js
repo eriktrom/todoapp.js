@@ -1,5 +1,5 @@
-// Version: v0.13-17-g8adb337
-// Last commit: 8adb337 (2013-06-05 19:24:24 -0700)
+// Version: v0.13-11-gd94e030
+// Last commit: d94e030 (2013-06-05 06:20:40 -0700)
 
 
 (function() {
@@ -41,7 +41,7 @@ var define, requireModule;
 */
 
 /**
-  All Ember Data methods and functions are defined inside of this namespace. 
+  All Ember Data methods and functions are defined inside of this namespace.
 
   @class DS
   @static
@@ -802,6 +802,8 @@ DS.Transaction = Ember.Object.extend({
     current transaction should not be used again.
   */
   rollback: function() {
+    var store = get(this, 'store');
+
     // Destroy all relationship changes and compute
     // all references affected
     var references = Ember.OrderedSet.create();
@@ -862,7 +864,7 @@ DS.Transaction = Ember.Object.extend({
       if(!record.get('isDirty')) {
         this.remove(record);
       }
-    }, this); 
+    }, this);
   },
 
   /**
@@ -1769,7 +1771,8 @@ DS.Store = Ember.Object.extend(DS._Mappable, {
 
     var unloadedReferences = this.unloadedReferences(references),
         manyArray = this.recordArrayManager.createManyArray(type, Ember.A(references)),
-        reference, i, l;
+        loadingRecordArrays = this.loadingRecordArrays,
+        reference, clientId, i, l;
 
     // Start the decrementing counter on the ManyArray at the number of
     // records we need to load from the adapter
@@ -4241,8 +4244,8 @@ DS.RelationshipChange.determineRelationshipType = function(recordType, knownSide
     else{
       return knownKind === "belongsTo" ? "oneToMany" : "manyToMany";
     }
-  } 
- 
+  }
+
 };
 
 DS.RelationshipChange.createChange = function(firstRecordReference, secondRecordReference, store, options){
@@ -4485,6 +4488,8 @@ DS.RelationshipChange.prototype = {
 
   /** @private */
   getByReference: function(reference) {
+    var store = this.store;
+
     // return null or undefined if the original reference was null or undefined
     if (!reference) { return reference; }
 
@@ -4792,7 +4797,8 @@ DS.hasMany = function(type, options) {
 };
 
 function clearUnmaterializedHasMany(record, relationship) {
-  var data = get(record, 'data').hasMany;
+  var store = get(record, 'store'),
+      data = get(record, 'data').hasMany;
 
   var references = data[relationship.key];
 
@@ -7364,7 +7370,7 @@ DS.loaderFor = loaderFor;
 
   For an example implementation, see {{#crossLink "DS.RestAdapter"}} the
   included REST adapter.{{/crossLink}}.
-  
+
   @class Adapter
   @namespace DS
   @extends Ember.Object
@@ -8444,6 +8450,8 @@ DS.RESTSerializer = DS.JSONSerializer.extend({
 
 
 (function() {
+/*global jQuery*/
+
 /**
   @module data
   @submodule data-adapters
