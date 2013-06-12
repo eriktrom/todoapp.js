@@ -1,9 +1,6 @@
-Todoapp.Todo = DS.Model.extend
-  title: DS.attr('string')
-  isCompleted: DS.attr('boolean')
+import Todo from 'todoapp/models/todo'
 
-
-Todoapp.Todo.FIXTURES = [
+Todo.FIXTURES = [
   id: 1,
   title: 'Learn Ember.js',
   isCompleted: true

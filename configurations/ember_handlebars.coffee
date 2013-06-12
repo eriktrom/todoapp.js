@@ -3,5 +3,7 @@ module.exports =
     options:
       processName: (filename) ->
         filename.replace(/templates\//,'').replace(/\.hbs$/,'')
-    files:
-      "tmp/public/<%=pkg.barename%>/templates.js": "templates/**/*.hbs"
+    files: [
+      src: "templates/**/*.hbs"
+      dest: "tmp/public/todoapp/templates.js"
+    ]

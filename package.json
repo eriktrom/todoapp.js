@@ -1,6 +1,5 @@
 {
-  "name": "todoapp.js",
-  "barename": "todoapp",
+  "name": "todoapp",
   "version": "0.1.0",
   "description": "A remake of the todoapp on the emberjs website, with a focus on testing using ember-testing. Also focused on learning using javascript based asset pipeline",
   "main": "index.js",
@@ -21,6 +20,9 @@
     "grunt-cli": "~0.1.9",
     "grunt-contrib-clean": "~0.4.1",
     "matchdep": "~0.1.2",
-    "grunt-ember-handlebars": "~0.6.0"
+    "grunt-ember-handlebars": "~0.6.0",
+    "grunt-es6-module-transpiler": "~0.3.0",
+    "grunt-contrib-coffee": "~0.7.0",
+    "grunt-contrib-jshint": "~0.6.0"
   }
 }

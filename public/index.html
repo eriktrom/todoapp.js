@@ -3,14 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <title>Todo App</title>
+  <script src="<%= manifestUrl('/vendor/loader.js') %>"></script>
+  <script src="<%= manifestUrl('/vendor/jquery.js') %>"></script>
+  <script src="<%= manifestUrl('/vendor/handlebars.js') %>"></script>
+  <script src="<%= manifestUrl('/vendor/ember-latest.js') %>"></script>
+  <script src="<%= manifestUrl('/vendor/ember-data-latest.js') %>"></script>
+  <script src="<%= manifestUrl('/todoapp.js') %>"></script>
 </head>
 <body>
-
-  <script src="../vendor/jquery-1.10.1.js"></script>
-  <script src="../vendor/handlebars.runtime-latest.js"></script>
-  <script src="../vendor/ember-latest.js"></script>
-  <script src="../vendor/ember-data-latest.js"></script>
-
-  <script src="../dist/todoapp.js-0.1.0.js"></script>
+  <script>
+    window.Todoapp = requireModule('todoapp/main').Todoapp;
+  </script>
 </body>
 </html>
