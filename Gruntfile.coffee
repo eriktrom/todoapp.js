@@ -8,6 +8,7 @@ module.exports = (grunt) ->
     pkg: grunt.file.readJSON('package.json')
 
     clean: ["tmp"]
+    ember_handlebars: config('ember_handlebars')
 
 
-  grunt.registerTask('build', ['clean'])
+  grunt.registerTask('build', ['clean', 'ember_handlebars'])
