@@ -13,6 +13,7 @@ module.exports = (grunt) ->
     transpile: config('transpile')
     coffee: config('coffee')
     jshint: config('jshint')
+    copy: config('copy')
 
 
 
@@ -22,4 +23,5 @@ module.exports = (grunt) ->
     'transpile'
     'coffee'
     'jshint'
+    'copy'
   ]
