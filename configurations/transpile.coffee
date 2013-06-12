@@ -15,9 +15,6 @@ module.exports =
     files: [
       expand: true
       cwd: 'test/'
-      src: [
-        '**/*.coffee'
-        '!fixtures/**'
-      ]
+      src: ['**/*.coffee']
       dest: 'tmp-coffee/public/test/'
     ]

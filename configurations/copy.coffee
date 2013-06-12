@@ -15,14 +15,6 @@ module.exports =
       dest: "tmp/public/test"
     ]
 
-  fixtures:
-    files: [
-      expand: true
-      cwd: "test/"
-      src: ["fixtures/**"]
-      dest: "tmp/public/test"
-    ]
-
   vendor:
     files: [
       expand: true
