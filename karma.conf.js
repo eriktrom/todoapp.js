@@ -13,7 +13,7 @@ files = [
 
   'tmp/public/vendor/loader.js',
   'tmp/public/vendor/jquery.js',
-  'tmp/public/vendor/handlebars.js',
+  'tmp/public/vendor/handlebars.runtime-latest.js',
   'tmp/public/vendor/ember-latest.js',
   'tmp/public/vendor/ember-data-latest.js',
 

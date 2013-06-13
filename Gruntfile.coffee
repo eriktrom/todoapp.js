@@ -1,9 +1,9 @@
 module.exports = (grunt) ->
   require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks)
-  grunt.loadTasks('tasks')
+  grunt.loadTasks('grunt/tasks')
 
   config = (configFileName) ->
-    require("./configurations/#{configFileName}")
+    require("./grunt/configurations/#{configFileName}")
 
   grunt.initConfig
     pkg: grunt.file.readJSON('package.json')
@@ -68,6 +68,7 @@ module.exports = (grunt) ->
   ]
 
   grunt.registerTask 'deploy', [
+    'test'
     'buildProduction'
     's3:dev'
   ]
