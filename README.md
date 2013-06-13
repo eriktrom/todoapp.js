@@ -7,14 +7,12 @@ A remake of the emberjs todo app from emberjs.com, with a focus on testing, java
 3. Go to [localhost:8000/test](localhost:8000/test) for test runner.
 4. Go to [localhost:8000](localhost:8000) to use the app.
 
-### Make it live on the web (WIP - you must invalidate your index.html file on deploy manually, use at own risk, peril)
+### Make it live on the web
 1. Create a new Amazon cloud front distribution using the amazon aws web interface. Set your `Default Root Object` to `index.html` during setup. (this is really easy, less than a minute). While your logged in to amazon, also make a new bucket to hold the app.
 2. Copy the domain name cloud front gives you into your `package.json` file: `"cloudfrontHost": "http://d2r0e4vnm570z9.cloudfront.net"` <-- that's mine, you'll need your own
 3. Copy the name of the s3 bucket you made to `"s3BucketName"` in package.json.
 3. On the command line run: `S3_KEY=your_key_here S3_SECRET=your_secret_here grunt deploy` <-- don't forget your own s3 key and secret.
 4. Visit your app on the web at `http://given_by_cloudfront.cloudfront.net`
 5. *Optionally*, set a CNAME for the app in cloudfront and point to it from your DNS zone file(e.g. inside godaddy)
-
-NOTE: Currently, with Cloud Front and this setup, every time you deploy, you need to manually invalidate the index.html inside aws or wait 24 hours for it to invalidate itself.
 
 [TODO](https://github.com/trombom/todoapp.js/blob/master/TODO.md)

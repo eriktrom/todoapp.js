@@ -18,4 +18,5 @@ module.exports =
     ,
       src: 'tmp/public/index.html'
       dest: 'index.html'
+      headers: {'Cache-Control': 'private, max-age=0, must-revalidate'}
     ]
