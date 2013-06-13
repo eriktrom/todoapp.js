@@ -10,7 +10,7 @@ module.exports = (grunt) ->
         manifestUrl: (path) ->
           if isProduction
             path = path.replace(/\.js$/, '.min.js') # add md5 directly before .js
-            console.log(process)
+            # console.log(process)
             grunt.config.process('<%= pkg.cloudfrontHost %>') + manifest[path]
           else
             path

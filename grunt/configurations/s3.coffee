@@ -10,8 +10,11 @@ module.exports =
       src: 'tmp/md5/<%= pkg.name %>*.js'
       dest: 'assets/'
     ,
-      src: 'tmp/md5/vendor/**/*-*.js'
+      src: 'tmp/md5/vendor/**/*.js'
       dest: 'assets/vendor/'
+    ,
+      src: 'tmp/md5/css/<%= pkg.name %>*.css'
+      dest: 'assets/'
     ,
       src: 'tmp/public/index.html'
       dest: 'index.html'

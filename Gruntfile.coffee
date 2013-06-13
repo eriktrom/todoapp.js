@@ -15,6 +15,7 @@ module.exports = (grunt) ->
     coffee: config('coffee')
     jshint: config('jshint')
     copy: config('copy')
+    sass: config('sass')
     concat: config('concat')
     connect: config('connect')
     watch: config('watch')
@@ -33,6 +34,7 @@ module.exports = (grunt) ->
     'coffee'
     'jshint'
     'copy'
+    'sass'
     'concat'
   ]
 

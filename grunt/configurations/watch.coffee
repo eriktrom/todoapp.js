@@ -6,6 +6,7 @@ module.exports =
     'vendor/**'
     'test/**'
     'templates/**'
+    'scss/**'
   ]
   tasks: [
     'buildDev'
