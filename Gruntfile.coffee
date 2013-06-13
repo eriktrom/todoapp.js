@@ -20,6 +20,7 @@ module.exports = (grunt) ->
     qunit: config('qunit')
     # deployment
     uglify: config('uglify')
+    md5: config('md5')
 
 
   grunt.registerTask 'build', [
@@ -48,5 +49,6 @@ module.exports = (grunt) ->
   grunt.registerTask 'assets', [
     'build'
     'uglify:all'
+    'md5'
   ]
 
