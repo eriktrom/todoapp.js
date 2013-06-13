@@ -2,7 +2,7 @@ module.exports =
   options:
     key: '<%= env.S3_KEY %>'
     secret: '<%= env.S3_SECRET %>'
-    bucket: '<%= pkg.name %>'
+    bucket: '<%= pkg.s3BucketName %>'
     gzip: true
     access: 'public-read'
   dev:

@@ -16,6 +16,7 @@
   "author": "Erik Trom",
   "license": "BSD",
   "cloudfrontHost": "http://d2r0e4vnm570z9.cloudfront.net",
+  "s3BucketName": "todoapp",
   "devDependencies": {
     "grunt": "~0.4.1",
     "grunt-cli": "~0.1.9",
