@@ -19,11 +19,6 @@
   <script src="/test.js"></script>
 
   <script>
-    Ember.keys(define.registry).forEach(requireModule);
-    window.Todoapp = requireModule('todoapp/main').Todoapp;
-  </script>
-
-  <script>
     document.write('<script src="http://'
     + location.host.split(':')[0]
     + ':35729/livereload.js"></'
