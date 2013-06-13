@@ -1,12 +1,5 @@
-<h1>Todos</h1>
-
-{{view Em.TextField id="new-todo"
-                    placeholder="What needs to be done?"
-                    valueBinding="newTitle"
-                    action="createTodo"}}
-
 <ul id="todo-list">
-  {{#each }}
+  {{#each}}
     <li {{bindAttr class="isCompleted:completed"}}>
       {{view Ember.Checkbox checkedBinding="isCompleted" class="toggle"}}
       <label>{{title}}</label><button class="destroy"></button>

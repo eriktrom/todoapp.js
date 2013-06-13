@@ -12,14 +12,15 @@ module "Todoapp",
   setup: -> Ember.run(Todoapp, Todoapp.advanceReadiness)
   teardown: -> Todoapp.reset()
 
-test "mark todo as completed", ->
+test "mark last todo as completed", ->
+  lastTodo = 'section#main li:last'
   expect 2
   visit('/')
   .then ->
-    equal find('li:last').hasClass('completed'), false
-  .click('li:last input')
+    equal find(lastTodo).hasClass('completed'), false
+  .click("#{lastTodo} input")
   .then ->
-    equal find('li:last').hasClass('completed'), true
+    equal find(lastTodo).hasClass('completed'), true
 
 # test "create a new todo", ->
 #   expect 1
