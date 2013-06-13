@@ -9,4 +9,4 @@ TodoController = Ember.ObjectController.extend
       value
   ).property('model.isCompleted')
 
-export TodoController
+export = TodoController

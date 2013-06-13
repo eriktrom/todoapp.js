@@ -1,8 +1,11 @@
-import Router from 'todoapp/router'
-import Store from 'todoapp/store'
+import 'todoapp/router' as Router
+import 'todoapp/store' as Store
+import 'resolver' as Resolver
 
 Application = Ember.Application.extend
+  modulePrefix: 'todoapp'
   Router: Router
   Store: Store
+  resolver: Resolver
 
-export Application
+export = Application

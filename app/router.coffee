@@ -4,4 +4,4 @@ Router = Ember.Router.extend()
 Router.map ->
   @resource 'todos', path: '/'
 
-export Router
+export = Router

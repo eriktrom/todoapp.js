@@ -6,7 +6,7 @@
                     action="createTodo"}}
 
 <ul id="todo-list">
-  {{#each itemController="todo"}}
+  {{#each }}
     <li {{bindAttr class="isCompleted:completed"}}>
       {{view Ember.Checkbox checkedBinding="isCompleted" class="toggle"}}
       <label>{{title}}</label><button class="destroy"></button>

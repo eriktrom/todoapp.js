@@ -1,4 +1,4 @@
-import Todo from 'todoapp/models/todo'
+import 'todoapp/models/todo' as Todo
 
 Todo.FIXTURES = [
   id: 1,
