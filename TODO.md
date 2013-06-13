@@ -1,3 +1,5 @@
+### TODO
+
 - make generating a new app easy
   - allow choices, for example mocha and heroku
   - allow <%= pkg.name %> to be used inside the transpile configuration
@@ -7,3 +9,4 @@
 - compress all assets into one file on build
 - neuter files before compressing them
 - make this todo list more of a step by step process instead of a bunch of random notes that might require me to remember stuff a long time from now
+- add support for using karma
