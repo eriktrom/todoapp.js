@@ -8,5 +8,6 @@ module.exports =
     'templates/**'
   ]
   tasks: [
-    'build'
+    'buildDev'
+    'karma:unit:run'
   ]

@@ -19,6 +19,7 @@ module.exports = (grunt) ->
     connect: config('connect')
     watch: config('watch')
     qunit: config('qunit')
+    karma: config('karma')
     # deployment
     uglify: config('uglify')
     md5: config('md5')
@@ -44,6 +45,7 @@ module.exports = (grunt) ->
   grunt.registerTask 'server', [
     'buildDev'
     'connect'
+    'karma:unit'
     'watch'
   ]
 
