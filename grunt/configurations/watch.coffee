@@ -7,6 +7,7 @@ module.exports =
     'test/**'
     'templates/**'
     'scss/**'
+    'public/**'
   ]
   tasks: [
     'buildDev'
