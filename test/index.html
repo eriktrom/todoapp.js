@@ -21,8 +21,6 @@
   <script>
     Ember.keys(define.registry).forEach(requireModule);
     window.Todoapp = requireModule('todoapp/main').Todoapp;
-
-    Todoapp.deferReadiness();
   </script>
 
   <script>
