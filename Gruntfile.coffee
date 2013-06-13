@@ -18,6 +18,8 @@ module.exports = (grunt) ->
     connect: config('connect')
     watch: config('watch')
     qunit: config('qunit')
+    # deployment
+    uglify: config('uglify')
 
 
   grunt.registerTask 'build', [
@@ -43,4 +45,8 @@ module.exports = (grunt) ->
     'qunit'
   ]
 
+  grunt.registerTask 'assets', [
+    'build'
+    'uglify:all'
+  ]
 
