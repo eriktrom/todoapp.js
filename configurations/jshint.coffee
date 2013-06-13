@@ -2,7 +2,7 @@ module.exports =
   all:
     src: [
       'tmp/public/**/*.js'
-      '!tmp/public/todoapp.js'
+      '!tmp/public/<%=pkg.name%>.js'
       '!tmp/public/vendor/**'
       '!tmp/public/test.js'
     ]

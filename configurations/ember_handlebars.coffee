@@ -5,5 +5,5 @@ module.exports =
         filename.replace(/templates\//,'').replace(/\.hbs$/,'')
     files: [
       src: "templates/**/*.hbs"
-      dest: "tmp/public/todoapp/templates.js"
+      dest: "tmp/public/<%=pkg.name%>/templates.js"
     ]

@@ -3,7 +3,7 @@ module.exports =
     files: [
       expand: true
       cwd: 'tmp/public/'
-      src: ['todoapp.js']
+      src: ['<%=pkg.name%>.js']
       ext: '.min.js'
       dest: 'tmp/public/'
     ,

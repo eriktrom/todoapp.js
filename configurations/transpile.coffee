@@ -1,3 +1,8 @@
+# TODO: file an issue of fix the fact that <%=pkg.name%> doesnt work with this
+# grunt package. It works with uglify, jshint, concat and ember_handlebars grunt
+# packages, look there for the answer. Then, replace 'todoapp' in the below code
+# with <%=pkg.name%>
+
 module.exports =
   main:
     type: 'amd'
