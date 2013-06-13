@@ -22,6 +22,7 @@ module.exports = (grunt) ->
     # deployment
     uglify: config('uglify')
     md5: config('md5')
+    s3: config('s3')
 
 
   grunt.registerTask 'build', [
@@ -55,6 +56,11 @@ module.exports = (grunt) ->
     'index.html'
   ]
 
+  grunt.registerTask 'deploy', [
+    'assets'
+    's3:dev'
+  ]
+
   # TODO: index.html task could be better abstracted. Right now, it comes after
   # build when using it in development, but must come after md5 when building
   # for production. We could make two seperate index.html tasks - one for dev
@@ -79,3 +85,6 @@ module.exports = (grunt) ->
   #
   # ^^ condense me when you get a chance.
 
+
+  # TODO: compress all vendor dependencies into one file
+  # TODO: neuter ember to make it smaller
