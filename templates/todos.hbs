@@ -1,8 +1,46 @@
-<ul id="todo-list">
-  {{#each}}
-    <li {{bindAttr class="isCompleted:completed"}}>
-      {{view Ember.Checkbox checkedBinding="isCompleted" class="toggle"}}
-      <label>{{title}}</label><button class="destroy"></button>
-    </li>
-  {{/each}}
-</ul>
+<section id="todoapp">
+  <header id="header">
+    <h1>todos</h1>
+    {{view Em.TextField id="new-todo"
+                        placeholder="What needs to be done?"
+                        valueBinding="newTitle"
+                        action="createTodo"}}
+  </header>
+
+  <section id="main">
+    <ul id="todo-list">
+      {{#each}}
+        <li {{bindAttr class="isCompleted:completed"}}>
+          {{view Ember.Checkbox checkedBinding="isCompleted" class="toggle"}}
+          <label>{{title}}</label><button class="destroy"></button>
+        </li>
+      {{/each}}
+    </ul>
+  </section>
+
+  <footer id="footer">
+    <span id="todo-count">
+      <strong>2</strong> todos left
+    </span>
+    <ul id="filters">
+      <li>
+        <a href="all" class="selected">All</a>
+      </li>
+      <li>
+        <a href="active">Active</a>
+      </li>
+      <li>
+        <a href="completed">Completed</a>
+      </li>
+    </ul>
+
+    <button id="clear-completed">
+      Clear completed (1)
+    </button>
+  </footer>
+
+</section>
+
+<footer id="info">
+  <p>Double-click to edit a todo</p>
+</footer>
