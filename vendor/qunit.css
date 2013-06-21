@@ -1,3 +1,7 @@
+body {
+  background-color: #28211C;
+}
+
 /**
  * QUnit v1.11.0 - A JavaScript Unit Testing Framework
  *
@@ -11,7 +15,7 @@
 /** Font Family and Sizes */
 
 #qunit-tests, #qunit-header, #qunit-banner, #qunit-testrunner-toolbar, #qunit-userAgent, #qunit-testresult {
-	font-family: "Helvetica Neue Light", "HelveticaNeue-Light", "Helvetica Neue", Calibri, Helvetica, Arial, sans-serif;
+	font-family: "Source Code Pro", "Helvetica Neue Light", "HelveticaNeue-Light", "Helvetica Neue", Calibri, Helvetica, Arial, sans-serif;
 }
 
 #qunit-testrunner-toolbar, #qunit-userAgent, #qunit-testresult, #qunit-tests li { font-size: small; }
@@ -66,7 +70,7 @@
 #qunit-testrunner-toolbar {
 	padding: 0.5em 0 0.5em 2em;
 	color: #5E740B;
-	background-color: #eee;
+	background-color: #ccc;
 	overflow: hidden;
 }
 
@@ -120,7 +124,7 @@
 	margin-top: 0.5em;
 	padding: 0.5em;
 
-	background-color: #fff;
+	background-color: black;
 
 	border-radius: 5px;
 	-moz-border-radius: 5px;
@@ -180,8 +184,8 @@
 /*** Passing Styles */
 
 #qunit-tests li li.pass {
-	color: #3c510c;
-	background-color: #fff;
+	color: #C6E746;
+	background-color: #28211C;
 	border-left: 10px solid #C6E746;
 }
 
@@ -197,7 +201,7 @@
 
 #qunit-tests li li.fail {
 	color: #710909;
-	background-color: #fff;
+	background-color: #CCC;
 	border-left: 10px solid #EE5757;
 	white-space: pre;
 }
